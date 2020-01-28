@@ -19,6 +19,7 @@ def run_sim_serial(vars):
     v_results = []    # STD of V for all runs
 
     for i in range(vars["runs"]):
+        vars["seed"] = misc.load_seed()
         n_std, v_std = sim(vars)
 
         x_results.append(n_std)
@@ -53,13 +54,17 @@ def sim(vars):
 
     point = np.random.rand() * 2 * np.pi
 
+    if vars["vis"]: vis_init()
+
+    rule_rate = round(vars["rule_time"]/vars["phys_time"])
+
     for b in flock:
         b.reset(point)
 
-    for j in range(int(vars["run_time"] / vars["timestep"])):
+    for j in range(int(vars["run_time"] / vars["phys_time"])):
 
         for b in flock:
-            if j % vars["rule_rate"] == 0:
+            if j % rule_rate == 0:
                 b.apply_behaviour(flock)
 
             b.update()
@@ -119,7 +124,7 @@ def vis_frame(vars, point, flock, iter):
     ax.add_collection(p)
     ax.set_xlim(vars["s"])
     ax.set_ylim(vars["s"])
-    plt.text(vars["s"] - 10, vars["s"] - 10, "$Time (sec) = {:.3f}$".format(iter * vars["timestep"]), fontsize=12)
+    plt.text(vars["s"] - 10, vars["s"] - 10, "$Time (sec) = {:.3f}$".format(iter * vars["phys_time"]), fontsize=12)
     plt.pause(0.001)
     fig.canvas.draw()
 

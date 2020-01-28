@@ -2,16 +2,13 @@ import pickle as pk
 import numpy as np
 import time
 
+mac = 1     # If running on mac, mac = 1
 
 def load_seed():
-    seeds = pk.load(open('seed.pickle', 'rb'))
-
-    if len(seeds) < 100:
-        try:
-            np.random.seed(seeds[0])
-        except:
-            print("Ran out of seed, might be a bug")
-            np.random.seed(round(time.time()))
+    try:
+        seeds = pk.load(open('seed.pickle', 'rb'))
+    except:
+        np.random.seed(round(time.time()))
         make_seeds()
         seeds = pk.load(open('seed.pickle', 'rb'))
 
@@ -26,4 +23,7 @@ def make_seeds():
     pk.dump(seeds, open('seed.pickle', 'wb'))
 
 def wd():
-    return "/home/samknox/Dropbox (The University of Manchester)/D2020/PhD/Experiments/FlockingPython/Logs/"
+    if mac:
+        return "/Users/samknox/Dropbox (The University of Manchester)/D2020/PhD/Experiments/FlockingPython/Logs/"
+    else:
+        return "/home/samknox/Dropbox (The University of Manchester)/D2020/PhD/Experiments/FlockingPython/Logs/"

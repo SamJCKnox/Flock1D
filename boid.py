@@ -1,4 +1,5 @@
 import numpy as np
+import misc
 
 class boid():
 
@@ -7,21 +8,20 @@ class boid():
 
     def __init__(self, vars):
 
-        self.R0 = vars["R0"]                             # meters for non-dimensionalising
-        self.T0 = vars["T0"]
-
         self.acc = 0
         self.F_alignment = 0
         self.F_cohesion = 0
         self.F_separation = 0
         self.F_migration = 0
 
+        self.R0 = vars["s"] / (2 * np.pi)
+
         self.gains = vars["gains"]
-        self.max_force = vars["max_force"] / self.R0 / self.T0**2   # Max Force - non dimensionalised
-        self.max_speed = vars["max_speed"] / self.R0 / self.T0      # Max speed - non dimensionalised
-        self.phys_time = vars["phys_time"] / self.T0                # Time step for physics update
-        self.rule_time = vars["rule_time"] / self.T0                # Time step for rule update
-        self.size = vars["s"] / self.R0                             # Arena size - non dimensionalised
+        self.max_force = vars["max_force"] / self.R0    # Max Force - non dimensionalised
+        self.max_speed = vars["max_speed"] / self.R0    # Max speed - non dimensionalised
+        self.phys_time = vars["phys_time"]              # Time step for physics update
+
+        self.size = vars["s"] / self.R0                 # Arena size - non dimensionalised
         self.num = vars["num"]
         self.point = 0
         np.random.seed(vars["seed"])

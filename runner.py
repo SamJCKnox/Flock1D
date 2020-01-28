@@ -25,24 +25,24 @@ T0 = boid_size / char_speed
 arena = 500             # meters
 num = 5                 # ND
 density = num / arena
-
+R0 = arena / num
 
 
 vars = {
     # Statistics for Runs
     "seed":         seed,
-    "runs":         3,
-    "run_time":     1,                # Seconds
+    "runs":         50,
+    "run_time":     10,                # Seconds
     "file":         'Test',
 
     # Sim Properties
     "num":          num,
     "s":            arena,
     "threshold":    0.01 * 2 * np.pi,
-    "R0":           R0,
+    "R0":           arena/(2*np.pi),
     "T0":           T0,
     "gains":        [1, 0, 0, 0],
-    "rule_time":    1,               # Seconds
+    "rule_time":    0.5,               # Seconds
     "phys_time":    0.1,
     "max_force":    5 * 9.81,
     "max_speed":    char_speed,
@@ -50,13 +50,13 @@ vars = {
     # Sim Bools
     "vis":          False,
     "plot":         False,
-    "safety":       True,
+    "safety":       False,
     "serial":       True,
     "inner_serial": False,
 
     # Exp variables
-    "working_var":  'gains[0]',
-    "variables":    [0, 0.5, 1, 1.5]
+    "working_var":  "phys_time",
+    "variables":    [0.5, 0.1, 0.05, 0.01]
 }
 
 # Saving Vars File
@@ -107,11 +107,15 @@ if not vars["plot"]:
 # Plotting results
 results = plotter.import_data([vars["file"]])
 
-if vars["working_var"] == "timestep" or vars["working_var"] == "rule_rate":
-    plotter.plot_multi_mean_time(vars, results)
+if vars["working_var"] == "phys_time" or vars["working_var"] == "rule_rate":
+    plotter.plot_multi(vars, results)
 elif vars["working_var"] == "num":
     plotter.plot_multi_mean_nums(vars, results)
 elif vars["working_var"] == "gains[0]":
+    plotter.plot_multi_velocity(vars, results)
+elif vars["working_var"] == "max_force":
+    plotter.plot_multi_velocity(vars, results)
+elif vars["working_var"] == "max_speed":
     plotter.plot_multi_velocity(vars, results)
 
 # Printing the final dictionary
