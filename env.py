@@ -115,7 +115,9 @@ def vis_frame(vars, point, flock, iter):
         [x, y] = make_vector(b.pos, vars)
         patches.append(Circle((x, y), vars["s"] * 0.04 / 2))
         [x, y] = make_text_vector(b.pos, vars)
-        plt.text(x, y, "$F={:.1f}$\n$F_s={:.1f}$".format(b.acc, b.F_separation), fontsize=10)
+        plt.text(x, y,
+                 f"$F={b.acc:.1f}$\n$[{b.F_alignment:.1f},{b.F_cohesion:.1f},{b.F_separation:.1f},{b.F_migration:.1f}]$",
+                 fontsize=10)
 
     p = PatchCollection(patches, alpha=0.6)
     colours = [0, 10]

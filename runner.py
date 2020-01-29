@@ -31,7 +31,7 @@ R0 = arena / num
 vars = {
     # Statistics for Runs
     "seed":         seed,
-    "runs":         50,
+    "runs":         1,
     "run_time":     10,                # Seconds
     "file":         'Test',
 
@@ -41,8 +41,8 @@ vars = {
     "threshold":    0.01 * 2 * np.pi,
     "R0":           arena/(2*np.pi),
     "T0":           T0,
-    "gains":        [1, 0, 0, 0],
-    "rule_time":    0.5,               # Seconds
+    "gains":        [0, 1, 0, 0],
+    "rule_time":    0.1,               # Seconds
     "phys_time":    0.1,
     "max_force":    5 * 9.81,
     "max_speed":    char_speed,
@@ -55,8 +55,11 @@ vars = {
     "inner_serial": False,
 
     # Exp variables
-    "working_var":  "phys_time",
-    "variables":    [0.5, 0.1, 0.05, 0.01]
+    "working_var":  "max_force",
+    "variables":    [10, 50, 100],
+
+    # Plotting variables
+    "y":            1                   # 0 for x_std, 1 for v_std
 }
 
 # Saving Vars File
@@ -107,7 +110,7 @@ if not vars["plot"]:
 # Plotting results
 results = plotter.import_data([vars["file"]])
 
-if vars["working_var"] == "phys_time" or vars["working_var"] == "rule_rate":
+if vars["working_var"] == "phys_time" or vars["working_var"] == "rule_time":
     plotter.plot_multi(vars, results)
 elif vars["working_var"] == "num":
     plotter.plot_multi_mean_nums(vars, results)

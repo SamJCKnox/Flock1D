@@ -4,16 +4,22 @@ import numpy as np
 import misc
 from matplotlib.lines import Line2D
 #
-# from matplotlib import rc
-# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-# ## for Palatino and other serif fonts use:
-# #rc('font',**{'family':'Serif','Serif':['Palatino']})
-# rc('text', usetex=True)
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+#rc('font',**{'family':'Serif','Serif':['Palatino']})
+rc('text', usetex=True)
 
 legend_titles = {
     "max_force":    "Max Force",
     "phys_time":    "Timestep Physics",
     "num":          "\# of Boids",
+    "rule_time":    "Timestep Rules"
+}
+
+y_labels = {
+    0:  "$\sigma_x \; [m]$",
+    1:  "$\sigma_v \; [m]$",
 }
 
 def import_data(files):
@@ -42,7 +48,7 @@ def plot_multi(vars, data):
 
     for i in range(len(data)):
         d = np.array(data[i])
-        d = d[:, 0]             # run number, 0 for x_std or 1 for v_std
+        d = d[:, vars["y"]]
         y = np.mean(d, axis=0)
         if vars["working_var"] == 'phys_time':
             x = np.linspace(0, vars["run_time"], int(vars["run_time"] / vars["variables"][i]))
@@ -50,8 +56,8 @@ def plot_multi(vars, data):
             x = np.linspace(0, vars["run_time"], int(vars["run_time"]/vars["phys_time"]))
         st = str(vars["variables"][i])
         ls[i], = ax.plot(x, y, label = st)
-        ax.set_xlabel("$t \; [s]$", fontsize=16)
-        ax.set_ylabel("$\sigma_x \; [m]$", fontsize=16)
+        ax.set_xlabel("$t\;[s]$", fontsize=16)
+        ax.set_ylabel(y_labels[vars["y"]], fontsize=16)
 
     plt.grid()
     if len(vars["variables"]) > 4:

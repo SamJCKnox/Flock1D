@@ -2,7 +2,7 @@ import pickle as pk
 import numpy as np
 import time
 
-mac = 1     # If running on mac, mac = 1
+mac = 0     # If running on mac, mac = 1
 
 def load_seed():
     try:
