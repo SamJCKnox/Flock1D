@@ -18,14 +18,14 @@ legend_titles = {
 }
 
 y_labels = {
-    0:  "$\sigma_x \; [m]$",
-    1:  "$\sigma_v \; [m]$",
+    0:  "$\hat{\sigma_x} \; \scriptstyle[m]$",
+    1:  "$\hat{\sigma_v} \; \scriptstyle [ms^{-1}]$",
 }
 
 def import_data(files):
     data = []
     for file in files:
-        ds = pk.load(open(misc.wd() + file + "_data.pickle",'rb'))
+        ds = pk.load(open(misc.wd() + file + "_data.pickle", 'rb'))
         for d in ds:
             data.append(d)
 
@@ -49,26 +49,53 @@ def plot_multi(vars, data):
     for i in range(len(data)):
         d = np.array(data[i])
         d = d[:, vars["y"]]
-        y = np.mean(d, axis=0)
-        if vars["working_var"] == 'phys_time':
-            x = np.linspace(0, vars["run_time"], int(vars["run_time"] / vars["variables"][i]))
-        else:
-            x = np.linspace(0, vars["run_time"], int(vars["run_time"]/vars["phys_time"]))
+
+        y = np.mean(d, axis=0) * vars["S2r"]    # Converting back to meters
+
+        x, y, T0 = ND(vars, y, i)
+
+
         st = str(vars["variables"][i])
         ls[i], = ax.plot(x, y, label = st)
-        ax.set_xlabel("$t\;[s]$", fontsize=16)
-        ax.set_ylabel(y_labels[vars["y"]], fontsize=16)
+        ax.set_xlabel("$\hat{t}\;\scriptstyle[s]$", fontsize=20)
+        ax.set_ylabel(y_labels[vars["y"]], fontsize=20)
 
     plt.grid()
     if len(vars["variables"]) > 4:
         leg = ax.legend(title=legend_titles[vars["working_var"]], ncol=2)
     else:
         leg = ax.legend(title=legend_titles[vars["working_var"]], ncol=1)
-    plt.xlim(0, int(vars["run_time"]))
+    plt.xlim(0, vars["run_time"]/T0)
     plt.ylim(bottom=0)
     plt.tight_layout()
 
     plt.show()
+
+
+
+def ND(vars, y, i):
+    # The several cases for ND will be handled individually here
+
+    T0 = vars["s"] / vars["max_speed"]        # Time to do a full lap
+
+    if vars["y"] == 0:  # x_std
+        R0 = vars["s"] / vars["num"]          # Mean space between separated boids
+    elif vars["y"] == 1:    # v_std
+        R0 = vars["max_speed"]
+
+    y = y / R0
+
+    # Special handling for changing physics time
+    if vars["working_var"] == 'phys_time':
+        x = np.linspace(0, vars["run_time"], int(vars["run_time"] / vars["variables"][i])) / T0
+    elif vars["working_var"] == 'max_speed':
+        T0 = (vars["boid_size"] / vars["variables"][i])
+        x = np.linspace(0, vars["run_time"],
+                        int(vars["run_time"] / vars["variables"][i])) / T0
+    else:
+        x = np.linspace(0, vars["run_time"], int(vars["run_time"] / vars["phys_time"])) / T0
+
+    return x, y, T0
 
 def plot_multi_mean_time(vars, data):
 

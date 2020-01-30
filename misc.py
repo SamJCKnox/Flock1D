@@ -7,12 +7,13 @@ mac = 0     # If running on mac, mac = 1
 def load_seed():
     try:
         seeds = pk.load(open('seed.pickle', 'rb'))
+        s = seeds[0]
     except:
         np.random.seed(round(time.time()))
         make_seeds()
         seeds = pk.load(open('seed.pickle', 'rb'))
+        s = seeds[0]
 
-    s = seeds[0]
     seeds = np.delete(seeds, 0)
     pk.dump(seeds, open('seed.pickle', 'wb'))
     return s

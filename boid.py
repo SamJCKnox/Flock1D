@@ -14,14 +14,14 @@ class boid():
         self.F_separation = 0
         self.F_migration = 0
 
-        self.R0 = vars["s"] / (2 * np.pi)
+        self.S2r = vars["S2r"]
 
         self.gains = vars["gains"]
-        self.max_force = vars["max_force"] / self.R0    # Max Force - non dimensionalised
-        self.max_speed = vars["max_speed"] / self.R0    # Max speed - non dimensionalised
+        self.max_force = vars["max_force"] / self.S2r    # Max Force - non dimensionalised
+        self.max_speed = vars["max_speed"] / self.S2r    # Max speed - non dimensionalised
         self.phys_time = vars["phys_time"]              # Time step for physics update
 
-        self.size = vars["s"] / self.R0                 # Arena size - non dimensionalised
+        self.size = vars["s"] / self.S2r                 # Arena size - non dimensionalised
         self.num = vars["num"]
         self.point = 0
         np.random.seed(vars["seed"])
