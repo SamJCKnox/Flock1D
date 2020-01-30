@@ -18,8 +18,8 @@ legend_titles = {
 }
 
 y_labels = {
-    0:  "$\hat{\sigma_x} \; \scriptstyle[m]$",
-    1:  "$\hat{\sigma_v} \; \scriptstyle [ms^{-1}]$",
+    0:  "$\sigma_{\hat{x}} \; \scriptstyle[m]$",
+    1:  "$\sigma_{\hat{v}} \; \scriptstyle [ms^{-1}]$",
 }
 
 def import_data(files):

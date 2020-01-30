@@ -13,17 +13,17 @@ seed = misc.load_seed()
 vars = {
     # Statistics for Runs
     "seed":         seed,
-    "runs":         200,
-    "run_time":     15,                # Seconds
-    "file":         'Test',
+    "runs":         1000,
+    "run_time":     30,                # Seconds
+    "file":         'R3',
 
     # Sim Properties
-    "num":          3,
+    "num":          5,
     "s":            500,
     "boid_size":    0.3,
     "threshold":    0.01 * 2 * np.pi,
     "S2r":          500/(2*np.pi),
-    "gains":        [1, 0, 0, 0],
+    "gains":        [0, 1, 0, 0],
     "rule_time":    2,               # Seconds
     "phys_time":    0.01,
     "max_force":    5 * 9.81,
@@ -31,17 +31,17 @@ vars = {
 
     # Sim Bools
     "vis":          False,
-    "plot":         False,
+    "plot":         True,
     "safety":       True,
     "serial":       True,
     "inner_serial": False,
 
     # Exp variables
     "working_var":  "phys_time",
-    "variables":    [2,1,0.5, 0.1, 0.05, 0.01],
+    "variables":    [2, 1, 0.5, 0.1, 0.05, 0.01],
 
     # Plotting variables
-    "y":            1                   # 0 for x_std, 1 for v_std
+    "y":            0                   # 0 for x_std, 1 for v_std
 }
 
 # Saving Vars File
@@ -90,7 +90,7 @@ if not vars["plot"]:
             print(f'Overall time: {time.time() - start}')
 
 # Plotting results
-results = plotter.import_data([vars["file"]])
+results = plotter.import_data([vars["file"],"R2"])
 
 plotter.plot_multi(vars, results)
 
