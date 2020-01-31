@@ -51,6 +51,7 @@ def sim(vars):
 
     n_std = []
     v_std = []
+    x_av = []
 
     point = np.random.rand() * 2 * np.pi
 
@@ -79,13 +80,16 @@ def sim(vars):
         if vars["vis"]: vis_frame(vars, point, flock, j)
 
         # Statistics
-        neighbours = np.zeros((vars["num"],))
-        velocities = np.zeros((vars["num"],))
+        xmin = np.zeros((vars["num"],))
+        xav = np.zeros((vars["num"],))
+        v = np.zeros((vars["num"],))
         for n, b in zip(range(vars["num"]), flock):
-            neighbours[n] = b.nearest_neighbour(flock)
-            velocities[n] = b.vel
-        v_std.append(np.std(velocities))
-        n_std.append(np.std(neighbours))
+            xmin[n], xav[n] = b.nearest_neighbour(flock)
+            v[n] = b.vel
+
+        v_std.append(np.std(v))
+        n_std.append(np.std(xmin))
+        x_av.append(np.mean(xav))
 
     if vars["vis"]:
         plt.show(block=False)
@@ -93,7 +97,7 @@ def sim(vars):
         plt.close('all')
         plt.pause(0.001)
 
-    return [n_std, v_std]
+    return [n_std, v_std, x_av]
 
 
 def vis_init():

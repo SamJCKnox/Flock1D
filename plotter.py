@@ -18,8 +18,9 @@ legend_titles = {
 }
 
 y_labels = {
-    0:  "$\sigma_{\hat{x}} \; \scriptstyle[m]$",
-    1:  "$\sigma_{\hat{v}} \; \scriptstyle [ms^{-1}]$",
+    0:  "$\sigma_{\hat{x}}$",
+    1:  "$\sigma_{\hat{v}}$",
+    2:  "$\mu_{\hat{x}}$"
 }
 
 def import_data(files):
@@ -57,7 +58,7 @@ def plot_multi(vars, data):
 
         st = str(vars["variables"][i])
         ls[i], = ax.plot(x, y, label = st)
-        ax.set_xlabel("$\hat{t}\;\scriptstyle[s]$", fontsize=20)
+        ax.set_xlabel("$\hat{t}$", fontsize=20)
         ax.set_ylabel(y_labels[vars["y"]], fontsize=20)
 
     plt.grid()
@@ -82,6 +83,8 @@ def ND(vars, y, i):
         R0 = vars["s"] / vars["num"]          # Mean space between separated boids
     elif vars["y"] == 1:    # v_std
         R0 = vars["max_speed"]
+    elif vars["y"] == 2:    #
+        R0 = vars["s"]
 
     y = y / R0
 

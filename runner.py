@@ -14,8 +14,8 @@ vars = {
     # Statistics for Runs
     "seed":         seed,
     "runs":         1000,
-    "run_time":     30,                # Seconds
-    "file":         'R3',
+    "run_time":     40,                # Seconds
+    "file":         'R4',
 
     # Sim Properties
     "num":          5,
@@ -24,25 +24,43 @@ vars = {
     "threshold":    0.01 * 2 * np.pi,
     "S2r":          500/(2*np.pi),
     "gains":        [0, 1, 0, 0],
-    "rule_time":    2,               # Seconds
-    "phys_time":    0.01,
+    "rule_time":    0.1,               # Seconds
+    "phys_time":    0.1,
     "max_force":    5 * 9.81,
     "max_speed":    20,
+    "sep_a":        100,            # Gaussian function: a is the height of the curve
+    "sep_c":        1,              # Gaussian function: c is the std of the curve
 
     # Sim Bools
     "vis":          False,
-    "plot":         True,
+    "plot":         False,
     "safety":       True,
     "serial":       True,
     "inner_serial": False,
+    "help":         True,
 
     # Exp variables
-    "working_var":  "phys_time",
-    "variables":    [2, 1, 0.5, 0.1, 0.05, 0.01],
+    "working_var":  "num",
+    "variables":    [5, 6, 7, 8],
 
     # Plotting variables
-    "y":            0                   # 0 for x_std, 1 for v_std
+    "y":            2                   # 0 for x_std, 1 for v_std, 2 for x_av
 }
+# Help functions
+if vars["help"]:
+    x = input("Available functions:\n1: Separation Plot\n2: Dictionary Print\n ")
+    if x == '1':
+        misc.separation_plot(vars)
+    if x == '2':
+        x = input("Which vars file? ")
+        try:
+            misc.print_dict(x)
+        except:
+            x = input('That file doesn\'t exist, try again: ')
+            misc.print_dict(x)
+
+
+
 
 # Saving Vars File
 
@@ -90,7 +108,7 @@ if not vars["plot"]:
             print(f'Overall time: {time.time() - start}')
 
 # Plotting results
-results = plotter.import_data([vars["file"],"R2"])
+results = plotter.import_data([vars["file"]])
 
 plotter.plot_multi(vars, results)
 

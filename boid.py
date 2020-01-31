@@ -29,6 +29,9 @@ class boid():
         self.pos = np.random.rand() * self.size
         self.vel = (np.random.rand() - 0.5) * self.max_speed
 
+        self.a = vars["sep_a"] / vars["S2r"]                       # Gaussian function: a is the height of the curve
+        self.c = vars["sep_c"] / vars["S2r"]                       # Gaussian function: c is the std of the curve
+
     def reset(self, point):
         self.pos = np.random.rand() * self.size
         self.vel = (np.random.rand() - 0.5)*self.max_speed
@@ -95,7 +98,7 @@ class boid():
             if self.pos != boid.pos:
                 angle = self.angles(boid.pos)
 
-                steering += - np.sign(angle) * self.size / np.absolute(angle)
+                steering += - np.sign(angle) * self.separation_profile(angle)
 
                 total += 1
 
@@ -122,9 +125,15 @@ class boid():
 
     def nearest_neighbour(self, flock):
         dist = 2 * np.pi
+        sums = 0
         for b in flock:
             if self.pos != b.pos:
                 a = np.absolute(self.angles(b.pos))
+                sums += a
                 if a < dist:
                     dist = a
-        return dist
+        average = sums / len(flock)
+        return dist, average
+
+    def separation_profile(self, x):
+        return self.a * np.exp(-x**2/(2 * self.c**2))
