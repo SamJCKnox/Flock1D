@@ -13,21 +13,15 @@ def run_sim_serial(vars):
     start = time.time()
     print(f'Starting {vars["working_var"]} value: {vars[vars["working_var"]]}')
 
-    # Generate a new flock and migration point
-
-    x_results = []    # STD for all runs
-    v_results = []    # STD of V for all runs
+    result = []
 
     for i in range(vars["runs"]):
         vars["seed"] = misc.load_seed()
-        n_std, v_std = sim(vars)
-
-        x_results.append(n_std)
-        v_results.append(v_std)
+        result.append(sim(vars))
 
     v = vars[vars["working_var"]]
     print(f"Completed {v}, in time {time.time() - start}")
-    return [x_results, v_results]
+    return result
 
 
 def run_sim_parallel(vars):
@@ -142,38 +136,3 @@ def make_vector(pos, vars):
 def make_text_vector(pos, vars):
     return [vars["s"] / 2 + 0.05 * vars["s"] + np.cos(pos) * vars["s"] * 0.35,
             vars["s"] / 2 + np.sin(pos) * vars["s"] * 0.35]
-
-
- # n_std = []  # STD of distance to neighbours
- #        v_std = []  # STD of velocities
- #        if vars["vis"]: vis_init()
- #
- #        point = np.random.rand() * 2 * np.pi
- #
- #        for b in flock:
- #            b.reset(point)
- #
- #        for j in range(int(vars["run_time"] / vars["timestep"])):
- #
- #            for b in flock:
- #                if j % vars["rule_rate"] == 0:
- #                    b.apply_behaviour(flock)
- #                b.update()
- #
- #            # Check for point update
- #            for b in flock:
- #                if b.point_reached(point, vars["threshold"]):
- #                    point = np.random.rand() * 2 * np.pi
- #                    for bb in flock:
- #                        bb.set_point(point)
- #
- #            if vars["vis"]: vis_frame(vars, point, flock, j)
- #
- #            # Statistics
- #            neighbours = np.zeros((vars["num"],))
- #            velocities = np.zeros((vars["num"],))
- #            for n, b in zip(range(vars["num"]), flock):
- #                neighbours[n] = b.nearest_neighbour(flock)
- #                velocities[n] = b.vel
- #            v_std.append(np.std(velocities))
- #            n_std.append(np.std(neighbours))

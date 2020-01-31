@@ -7,13 +7,15 @@ import concurrent.futures
 import time
 import misc
 
+t = True
+f = False
 
 seed = misc.load_seed()
 
 vars = {
     # Statistics for Runs
     "seed":         seed,
-    "runs":         1000,
+    "runs":         2,
     "run_time":     40,                # Seconds
     "file":         'R4',
 
@@ -36,8 +38,8 @@ vars = {
     "plot":         False,
     "safety":       True,
     "serial":       True,
-    "inner_serial": False,
-    "help":         True,
+    "inner_serial": t,
+    "help":         False,
 
     # Exp variables
     "working_var":  "num",
